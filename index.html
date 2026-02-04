@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Me perdonas?</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #fce4ec; /* Fondo rosita */
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            overflow: hidden; 
+        }
+
+        .contenedor {
+            text-align: center;
+            background: white;
+            padding: 40px;
+            width: 300px; /* Ancho fijo para que no baile el diseño */
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        h1 {
+            color: #d81b60;
+            font-size: 24px;
+        }
+
+        .foto {
+            width: 100%;
+            height: 200px; /* Altura fija para que las imágenes no muevan todo */
+            object-fit: cover; /* Ajusta la imagen para que se vea bien */
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 20px;
+            min-height: 50px; /* Espacio reservado para el texto */
+        }
+
+        .botones {
+            display: flex;
+            justify-content: center;
+            gap: 15px; /* Espacio entre botones */
+            position: relative;
+            height: 60px; /* Espacio para que el botón "No" se mueva sin romper nada */
+        }
+
+        button {
+            font-size: 16px;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            height: 45px;
+        }
+
+        #siBtn {
+            background-color: #4caf50;
+            color: white;
+            z-index: 10; /* Asegura que el botón Sí siempre esté pulsable */
+        }
+
+        #noBtn {
+            background-color: #f44336;
+            color: white;
+        }
+
+        /* Clase extra para ocultar elementos suavemente */
+        .oculto {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="contenedor">
+        <h1 id="titulo">¿Me perdonas? 🥺</h1>
+        
+        <img src="inicio.gif" alt="GIF" class="foto" id="imagen">
+        
+        <p id="mensaje">Sé que me equivoqué... ¿podemos arreglarlo?</p>
+        
+        <div class="botones" id="cajaBotones">
+            <button id="siBtn">Sí</button>
+            <button id="noBtn">No</button>
+        </div>
+    </div>
+
+    <script>
+        // Referencias a los elementos
+        const titulo = document.getElementById('titulo');
+        const imagen = document.getElementById('imagen');
+        const mensaje = document.getElementById('mensaje');
+        const siBtn = document.getElementById('siBtn');
+        const noBtn = document.getElementById('noBtn');
+        const cajaBotones = document.getElementById('cajaBotones');
+
+        let fase = 1; // Controla en qué etapa estamos
+
+        // Lógica del botón NO
+        const accionNo = () => {
+            if (fase === 1) {
+                // FASE 1: Primer click -> Cambia imagen y texto
+                imagen.src = "duda.gif"; // Asegúrate de tener este archivo
+                mensaje.innerText = "¿Estás segura?";
+                noBtn.innerText = "No"; // Mantiene el texto
+                fase = 2; // Pasamos a la siguiente fase
+            } else if (fase === 2) {
+                // FASE 2: Segundo intento -> El botón se mueve
+                moverBoton();
+            }
+        };
+
+        // Detectar click (para móviles y PC la primera vez)
+        noBtn.addEventListener('click', accionNo);
+        
+        // Detectar cuando el mouse pasa por encima (solo funcionará en Fase 2)
+        noBtn.addEventListener('mouseover', function() {
+            if (fase === 2) {
+                moverBoton();
+            }
+        });
+
+        // Función para mover el botón aleatoriamente
+        function moverBoton() {
+            // Hacemos que el botón sea 'absolute' para que se mueva libremente por la pantalla
+            noBtn.style.position = 'absolute';
+            noBtn.style.zIndex = '100'; // Que quede por encima de todo
+            
+            // Calculamos posición aleatoria dentro de toda la ventana
+            const anchoVentana = window.innerWidth - 100; // Restamos tamaño del botón
+            const altoVentana = window.innerHeight - 50;
+
+            const randomX = Math.random() * anchoVentana;
+            const randomY = Math.random() * altoVentana;
+
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+        }
+
+        // Lógica del botón SÍ
+        siBtn.addEventListener('click', function () {
+            // Cambiamos a modo feliz
+            imagen.src = "feliz.gif"; // Asegúrate de tener este archivo
+            titulo.innerText = "¡Siiiii!";
+            mensaje.innerText = "Te amo mucho, perdón ♥";
+            
+            // Ocultamos los botones para que solo quede el mensaje
+            cajaBotones.style.display = 'none';
+            
+            // Efecto opcional: confeti de fondo o color
+            document.body.style.backgroundColor = "#e8f5e9"; // Cambia fondo a verde clarito
+        });
+
+    </script>
+
+</body>
+</html>
